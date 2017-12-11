@@ -856,6 +856,7 @@ int main()
 	v3f e;
 	float dd;
 	v3f g;
+	float rw, rxyz;
 
 	i = 0;
 
@@ -867,7 +868,7 @@ asking:
 	if (c == 'y')
 		goto loading;
 	else if (c == 'n')
-		goto reading;
+		goto generating;
 	else
 		goto asking;
 
@@ -886,10 +887,10 @@ loading:
 			for (z = 0; z < BROSZ[2]; ++z)
 			{
 				fread(&g_brode[x][y][z].p, sizeof(float), 4, f);
-				printf("%d,%d,%dx: %f", x, y, z, g_brode[x][y][z].p.x);
-				printf("%d,%d,%dy: %f", x, y, z, g_brode[x][y][z].p.y);
-				printf("%d,%d,%dz: %f", x, y, z, g_brode[x][y][z].p.z);
-				printf("%d,%d,%dw: %f", x, y, z, g_brode[x][y][z].p.w);
+				printf("%d,%d,%dx: %f\r\n", x, y, z, g_brode[x][y][z].p.x);
+				printf("%d,%d,%dy: %f\r\n", x, y, z, g_brode[x][y][z].p.y);
+				printf("%d,%d,%dz: %f\r\n", x, y, z, g_brode[x][y][z].p.z);
+				printf("%d,%d,%dw: %f\r\n", x, y, z, g_brode[x][y][z].p.w);
 			}
 		}
 	}
@@ -897,6 +898,59 @@ loading:
 	fclose(f);
 
 	goto starting;
+
+generating:
+
+	printf("generate data? ");
+	scanf("%c", &c);
+
+	if (c == 'y')
+		goto generate;
+	else if (c == 'n')
+		goto reading;
+	else
+		goto generating;
+
+generate:
+
+	printf("xn: ");
+	scanf("%d", &BROSZ[0]);
+	printf("yn: ");
+	scanf("%d", &BROSZ[1]);
+	printf("zn: ");
+	scanf("%d", &BROSZ[2]);
+
+	g_brode = (brode***)malloc(sizeof(brode**)*BROSZ[0]);
+	for (x = 0; x < BROSZ[0]; ++x)
+	{
+		g_brode[x] = (brode**)malloc(sizeof(brode*)*BROSZ[1]);
+		for (y = 0; y < BROSZ[1]; ++y)
+		{
+			g_brode[x][y] = (brode*)malloc(sizeof(brode)*BROSZ[2]);
+			for (z = 0; z < BROSZ[2]; ++z)
+			{
+				g_brode[x][y][z].p.x = x - BROSZ[0] / 2.0f;
+				g_brode[x][y][z].p.y = y - BROSZ[1] / 2.0f;
+				g_brode[x][y][z].p.z = z - BROSZ[2] / 2.0f;
+				g_brode[x][y][z].p.w = (int)fmax(
+					(int)fabs(g_brode[x][y][z].p.x),
+					fmax(
+					(int)fabs(g_brode[x][y][z].p.y),
+						(int)fabs(g_brode[x][y][z].p.z)
+						)
+						) / fmax(BROSZ[0]/2, (int)fmax(BROSZ[1]/2, BROSZ[2]/2.0f)) * ((BROSZ[0] + BROSZ[1] + BROSZ[2]) / 3.0f);
+
+				rw = g_brode[x][y][z].p.w - (((BROSZ[0] + BROSZ[1] + BROSZ[2]) / 3.0f) / 2.0f);
+				rxyz = sqrtf((((BROSZ[0] + BROSZ[1] + BROSZ[2]) / 3.0f) / 2.0f) * (((BROSZ[0] + BROSZ[1] + BROSZ[2]) / 3.0f) / 2.0f) - rw * rw);
+
+				dd = mag3f(*(v3f*)&g_brode[x][y][z].p);
+
+				v3fmul((v3f*)&g_brode[x][y][z].p, *(v3f*)&g_brode[x][y][z].p, rxyz / (dd == 0 ? 1 : dd) );
+			}
+		}
+	}
+
+	goto saving;
 
 reading:
 
