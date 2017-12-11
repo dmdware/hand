@@ -914,7 +914,14 @@ reading:
 		for (y = 0; y < BROSZ[1]; ++y)
 		{
 			g_brode[x][y] = (brode*)malloc(sizeof(brode)*BROSZ[2]);
-			for (z = 0; z < BROSZ[2]; ++z)
+		}
+	}
+
+	for (z = 0; z < BROSZ[2]; ++z)
+	{
+		for (y = 0; y < BROSZ[1]; ++y)
+		{
+			for (x = 0; x < BROSZ[0]; ++x)
 			{
 				printf("%d,%d,%dx: ", x, y, z);
 				scanf("%f", &g_brode[x][y][z].p.x);
