@@ -171,6 +171,8 @@ int main()
 	int i;
 	v3f a[3];
 
+	i = 0;
+
 	while (1)
 	{
 		for (i = 0; i < 4; i++)

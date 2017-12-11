@@ -277,6 +277,8 @@ int main()
 	float b;
 	v3f c;
 
+	i = 0;
+
 	while (1)
 	{
 		printf("x%d: ", i);

@@ -164,6 +164,8 @@ int main()
 	int i;
 	v4f a[4];
 
+	i = 0;
+
 	while (1)
 	{
 		for (i = 0; i < 4; i++)
