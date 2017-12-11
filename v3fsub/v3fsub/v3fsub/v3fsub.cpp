@@ -276,6 +276,7 @@ int main()
 	v3f a;
 	v3f b;
 	v3f c;
+	v3f d;
 
 	i = 0;
 
@@ -288,16 +289,24 @@ int main()
 		printf("az%d: ", i);
 		scanf("%f", &a.z);
 
-		printf("bx%d: ", i);
+		printf("-bx%d: ", i);
 		scanf("%f", &b.x);
-		printf("by%d: ", i);
+		printf("-by%d: ", i);
 		scanf("%f", &b.y);
-		printf("bz%d: ", i);
+		printf("-bz%d: ", i);
 		scanf("%f", &b.z);
 
-		v3fsub(&c, a, b);
+		printf("+dx%d: ", i);
+		scanf("%f", &d.x);
+		printf("+dy%d: ", i);
+		scanf("%f", &d.y);
+		printf("+dz%d: ", i);
+		scanf("%f", &d.z);
 
-		printf("v3fsub(a-b): %f,%f,%f\r\n\r\n", c.x, c.y, c.z);
+		v3fsub(&c, a, b);
+		v3fadd(&c, c, d);
+
+		printf("v3fsub a-b+d: %f,%f,%f\r\n\r\n", c.x, c.y, c.z);
 
 		i++;
 	}

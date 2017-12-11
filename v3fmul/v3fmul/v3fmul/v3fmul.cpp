@@ -276,6 +276,7 @@ int main()
 	v3f a;
 	float b;
 	v3f c;
+	float d;
 
 	i = 0;
 
@@ -290,10 +291,12 @@ int main()
 
 		printf("m%d: ", i);
 		scanf("%f", &b);
+		printf("d%d: ", i);
+		scanf("%f", &d);
 
-		v3fmul(&c, a, b);
+		v3fmul(&c, a, b / d);
 
-		printf("v3fmul: %f,%f,%f\r\n\r\n", c.x, c.y, c.z);
+		printf("v3fmul a*m/d: %f,%f,%f\r\n\r\n", c.x, c.y, c.z);
 
 		i++;
 	}
